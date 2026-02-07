@@ -11,7 +11,7 @@ export default function ConfirmModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
 
       {/* Modal Card */}
-      <div className="bg-white w-full h-full w-[350px] sm:w-[500px] h-auto rounded-2xl
+      <div className="bg-white w-full h-full w-[350px] sm:w-[500px]  h-[300px] rounded-2xl
                       flex flex-col justify-center items-center
                       p-6 sm:p-8 shadow-2xl animate-scaleIn">
 
