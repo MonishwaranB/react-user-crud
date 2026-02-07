@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3001/users";
+const BASE_URL = "https://react-user-crud-z52i.onrender.com/users";
 
 // Get all users
 export const getUsers = () => axios.get(BASE_URL);
@@ -9,9 +9,7 @@ export const getUsers = () => axios.get(BASE_URL);
 export const createUser = (data) => axios.post(BASE_URL, data);
 
 // Update user
-export const updateUser = (id, data) =>
-  axios.put(`${BASE_URL}/${id}`, data);
+export const updateUser = (id, data) => axios.put(`${BASE_URL}/${id}`, data);
 
 // Delete user
-export const deleteUser = (id) =>
-  axios.delete(`${BASE_URL}/${id}`);
+export const deleteUser = (id) => axios.delete(`${BASE_URL}/${id}`);
