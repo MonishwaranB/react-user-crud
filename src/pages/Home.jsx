@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import UserForm from "../components/UserForm";
 import UserList from "../components/UserList";
+import ConfirmModal from "../components/ConfirmModal";
 
 import { getUsers, createUser, updateUser, deleteUser } from "../api/userApi";
 
@@ -10,6 +11,10 @@ export default function Home() {
   const [editUser, setEditUser] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Modal state (NEW)
+  const [showModal, setShowModal] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
   // Fetch users
   const fetchUsers = async () => {
     setLoading(true);
@@ -17,14 +22,13 @@ export default function Home() {
     try {
       const res = await getUsers();
       setUsers(res.data);
-    } catch (err) {
+    } catch {
       alert("Failed to load users");
     }
 
     setLoading(false);
   };
 
-  // Load on start
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -46,10 +50,23 @@ export default function Home() {
     }
   };
 
-  // Delete
-  const handleDelete = async (id) => {
-    await deleteUser(id);
+  // Open Modal (NEW)
+  const openDeleteModal = (id) => {
+    setSelectedId(id);
+    setShowModal(true);
+  };
+
+  // Close Modal (NEW)
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedId(null);
+  };
+
+  // Confirm Delete (NEW)
+  const handleConfirmDelete = async () => {
+    await deleteUser(selectedId);
     fetchUsers();
+    closeModal();
   };
 
   return (
@@ -59,13 +76,11 @@ export default function Home() {
       </h1>
 
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-        <div>
-          <UserForm
-            onSubmit={handleSubmit}
-            editData={editUser}
-            cancelEdit={() => setEditUser(null)}
-          />
-        </div>
+        <UserForm
+          onSubmit={handleSubmit}
+          editData={editUser}
+          cancelEdit={() => setEditUser(null)}
+        />
 
         <div className="backdrop-blur-lg bg-white/80 p-6 rounded-2xl shadow-xl">
           {loading ? (
@@ -74,11 +89,19 @@ export default function Home() {
             <UserList
               users={users}
               onEdit={setEditUser}
-              onDelete={handleDelete}
+              onDelete={openDeleteModal}
             />
           )}
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={showModal}
+        title="Delete User"
+        message="Are you sure you want to delete this user?"
+        onConfirm={handleConfirmDelete}
+        onCancel={closeModal}
+      />
     </div>
   );
 }

@@ -1,25 +1,4 @@
-import { useState } from "react";
-import ConfirmModal from "./ConfirmModal";
-
 export default function UserList({ users, onEdit, onDelete }) {
-  const [showModal, setShowModal] = useState(false);
-  const [selectedId, setSelectedId] = useState(null);
-
-  const openModal = (id) => {
-    setSelectedId(id);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedId(null);
-  };
-
-  const handleConfirm = () => {
-    onDelete(selectedId);
-    closeModal();
-  };
-
   return (
     <div>
       <h2 className="text-xl font-bold mb-4 text-center">User List</h2>
@@ -32,14 +11,15 @@ export default function UserList({ users, onEdit, onDelete }) {
         {users.map((user) => (
           <div
             key={user.id}
-            className="bg-white/90 backdrop-blur border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition flex justify-between items-center"
+            className="bg-white border border-gray-200 p-4 rounded-xl shadow-sm
+              transition hover:shadow-md flex flex-col gap-4"
           >
             <div>
-              <p className="font-medium">
+              <p className="font-medium break-words">
                 {user.firstName} {user.lastName}
               </p>
 
-              <p className="text-sm text-gray-600">{user.email}</p>
+              <p className="text-sm text-gray-600 break-all">{user.email}</p>
 
               <p className="text-sm text-gray-600">{user.phone}</p>
             </div>
@@ -53,7 +33,7 @@ export default function UserList({ users, onEdit, onDelete }) {
               </button>
 
               <button
-                onClick={() => openModal(user.id)}
+                onClick={() => onDelete(user.id)}
                 className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-lg transition shadow"
               >
                 Delete
@@ -62,13 +42,6 @@ export default function UserList({ users, onEdit, onDelete }) {
           </div>
         ))}
       </div>
-      <ConfirmModal
-        isOpen={showModal}
-        title="Delete User"
-        message="Are you sure you want to delete this user?"
-        onConfirm={handleConfirm}
-        onCancel={closeModal}
-      />
     </div>
   );
 }
